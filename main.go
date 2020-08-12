@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net"
 	"net/http"
 	"net/http/fcgi"
@@ -16,13 +16,13 @@ func main() {
 	var sockFile = os.Args[1]
 	http.HandleFunc("/", handler)
 	_ = os.Remove(sockFile)
+	fmt.Printf("Listen at: %s\n", sockFile)
 	listener, err := net.Listen("unix", sockFile)
-	log.Print("Listen at: ", sockFile)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	err = fcgi.Serve(listener, nil)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
